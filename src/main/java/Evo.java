@@ -1,6 +1,4 @@
-import org.jenetics.CharacterChromosome;
-import org.jenetics.CharacterGene;
-import org.jenetics.Genotype;
+import org.jenetics.*;
 import org.jenetics.engine.Engine;
 import org.jenetics.engine.EvolutionResult;
 import org.jenetics.util.CharSeq;
@@ -38,17 +36,22 @@ public final class Evo {
             Genotype.of(new CharacterChromosome(new CharSeq("HDLP"), 20));
 
         // Vybuduj GA engine
+        final Selector selector = new RouletteWheelSelector();
         Engine<CharacterGene, Integer> engine = Engine
             .builder(Evo::eval, gtf)
             .populationSize(100)
             .maximalPhenotypeAge(1000)
+            .offspringFraction(0.1)
+            .offspringSelector(new TournamentSelector<>(2))
+            .survivorsSelector(selector)
+            .alterers(new SinglePointCrossover(0.2), new Mutator(0.15))
             .build();
 
         // Vyber konecne vysledky
         final NumStats<Integer> stats = new NumStats();
 
         Genotype<CharacterGene> result = engine.stream()
-            .limit(500)
+            .limit(300)
             .peek(stats)
             .collect(EvolutionResult.toBestGenotype());
 
