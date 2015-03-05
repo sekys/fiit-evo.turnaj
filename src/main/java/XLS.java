@@ -1,11 +1,11 @@
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Iterator;
 
 /**
  * Created by Seky on 26. 2. 2015.
@@ -13,10 +13,9 @@ import java.util.Iterator;
 public class XLS {
     private HSSFWorkbook workbook;
     private HSSFSheet sheet;
-    private int rows;
     private File file;
 
-    public XLS(String name) {
+    public XLS(String name, int rows, int cells) {
         this.file = new File(name);
         try {
             workbook = new HSSFWorkbook(new FileInputStream(file));
@@ -24,21 +23,18 @@ public class XLS {
             e1.printStackTrace();
         }
         sheet = workbook.getSheetAt(0);
-        rows = 0;
-        Iterator<Row> rowIte =  sheet.iterator();
-        while(rowIte.hasNext()){
-            rowIte.next();
-            rowIte.remove();
+        for (int i = 0; i < rows; i++) {
+            Row row = sheet.createRow(i);
+            for (int a = 0; a < cells; a++) {
+                row.createCell(a).setCellValue(0);
+            }
         }
     }
 
-    public void addRow(Integer x, Double y) {
-        synchronized (this) {
-            Row row = sheet.createRow(rows);
-            row.createCell(0).setCellValue(x);
-            row.createCell(1).setCellValue(y);
-            rows++;
-        }
+    public void setCell(int x, int y, int value) {
+        Row row = sheet.getRow(x);
+        Cell cell = row.getCell(y);
+        cell.setCellValue(value);
     }
 
     public void write() {
@@ -52,10 +48,10 @@ public class XLS {
     }
 
     public static void main(String[] args) {
-        XLS xls = new XLS("graf.xls");
-        xls.addRow(0, 4.5);
-        xls.addRow(0, 4.5);
-        xls.addRow(0, 4.5);
+        XLS xls = new XLS("graph.xls", 3, 2);
+        xls.setCell(0, 1, 4);
+        xls.setCell(0, 1, 4);
+        xls.setCell(0, 1, 4);
         xls.write();
     }
 
