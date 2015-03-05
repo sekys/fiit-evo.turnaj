@@ -7,7 +7,7 @@ public final class Pokus {
     private XLS xls;
     private Random rnd = new Random();
 
-    private void vykonajPokus(int pokus, int krokov, int velkostTurnaja) {
+    private void vykonajGA(int pokus, int krokov, int velkostTurnaja) {
         int krok = 0;
         Jedinec best = null;
         Populacia populacia = Populacia.create(rnd);
@@ -28,53 +28,25 @@ public final class Pokus {
         }
     }
 
-    public void vykonajPokusy() {
+    public void vykonajPokus(Integer skupiva) {
         //Zapis pocet riadkov
-        xls = new XLS("graph.xls", 500, 101);
-        int krokov = 500;
+        int krokov = 1000;
+        xls = new XLS("graph" + skupiva + ".xls", krokov, 101);
         for (int krok = 0; krok < krokov; krok++) {
             xls.setCell(krok, 0, krok);
         }
         // Zapis do stlpcov pokusy
         for (int i = 0; i < 100; i++) {
-            vykonajPokus(i, 500, 2);
+            vykonajGA(i, krokov, skupiva);
         }
         xls.write();
+    }
 
-        xls = new XLS("graph2.xls", 500, 101);
-        krokov = 500;
-        for (int krok = 0; krok < krokov; krok++) {
-            xls.setCell(krok, 0, krok);
-        }
-        // Zapis do stlpcov pokusy
-        for (int i = 0; i < 100; i++) {
-            vykonajPokus(i, 500, 3);
-        }
-        xls.write();
-
-        xls = new XLS("graph3.xls", 500, 101);
-        krokov = 500;
-        for (int krok = 0; krok < krokov; krok++) {
-            xls.setCell(krok, 0, krok);
-        }
-        // Zapis do stlpcov pokusy
-        for (int i = 0; i < 100; i++) {
-            vykonajPokus(i, 500, 5);
-        }
-        xls.write();
-
-
-
-        xls = new XLS("graph4.xls", 500, 101);
-        krokov = 500;
-        for (int krok = 0; krok < krokov; krok++) {
-            xls.setCell(krok, 0, krok);
-        }
-        // Zapis do stlpcov pokusy
-        for (int i = 0; i < 100; i++) {
-            vykonajPokus(i, 500, 10);
-        }
-        xls.write();
+    public void vykonajPokusy() {
+        vykonajPokus(2);
+        vykonajPokus(3);
+        vykonajPokus(5);
+        vykonajPokus(10);
     }
 
 

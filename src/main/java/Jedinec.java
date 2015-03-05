@@ -5,7 +5,7 @@ import java.util.Random;
  */
 public final class Jedinec implements Comparable<Jedinec> {
     private static final String TARGET = "Ahoj, ako sa mas?";
-    private static final String CHAR_SET = "Ahoj, ako sa mas?";
+    private static final String CHAR_SET = "abcdefghijklmnopqrstuvxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,?!";
     private int fitness;
     private String chromozon;
 
