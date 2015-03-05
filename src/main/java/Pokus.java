@@ -14,29 +14,24 @@ public final class Pokus {
         for (krok = 0; krok < krokov; krok++) {
             populacia.eval();
             best = populacia.getBest();
-            xls.setCell(krok, pokus + 1, best.getFitness());
             if (best.findSolution()) {
-                break;
+                xls.setCell(pokus, 1, krok);
+                return;
             }
             Populacia novaPopulacia = populacia.vykonajTurnaj(rnd, velkostTurnaja);
             populacia = novaPopulacia;
         }
-
-        // Zapis zvysne riadky s najlepsou fitness
-        for (; krok < krokov; krok++) {
-            xls.setCell(krok, pokus + 1, best.getFitness());
-        }
+        xls.setCell(pokus, 1, 10001);
     }
 
     public void vykonajPokus(Integer skupiva) {
         //Zapis pocet riadkov
-        int krokov = 1000;
-        xls = new XLS("graph" + skupiva + ".xls", krokov, 101);
-        for (int krok = 0; krok < krokov; krok++) {
-            xls.setCell(krok, 0, krok);
-        }
+        int krokov = 10000;
+        int pokusov = 100;
+        xls = new XLS("graph" + skupiva + ".xls", pokusov, 2);
         // Zapis do stlpcov pokusy
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < pokusov; i++) {
+            xls.setCell(i, 0, i);
             vykonajGA(i, krokov, skupiva);
         }
         xls.write();
